@@ -73,7 +73,7 @@ export default function CategoryDetail() {
     if (filters.year) q.set('year', String(filters.year));
     if (filters.limit) q.set('limit', String(filters.limit));
 
-    const qs = q.toString();
+    // const qs = q.toString();
     if (skipReplace.current) {
       skipReplace.current = false;
       firstMount.current = false;
@@ -84,7 +84,7 @@ export default function CategoryDetail() {
       return;
     }
 
-    router.replace(`/the-loai/${categorySlug}${qs ? `?${qs}` : ''}`);
+    // router.replace(`/the-loai/${categorySlug}${qs ? `?${qs}` : ''}`);
   }, [filters, categorySlug, dispatch, router]);
 
   const handleFilterChange = <K extends keyof MovieQueryParams>(key: K, value: MovieQueryParams[K]) => {
