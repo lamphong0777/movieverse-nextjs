@@ -67,10 +67,18 @@ const Navbar: React.FC = () => {
                 <Link href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                   Trang Chủ
                 </Link>
-                <Link href="/danh-sach/phim-le" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link
+                  href="/danh-sach/phim-le"
+                  prefetch={false}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
                   Phim Lẻ
                 </Link>
-                <Link href="/danh-sach/phim-bo" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link
+                  href="/danh-sach/phim-bo"
+                  prefetch={false}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
                   Phim Bộ
                 </Link>
 
@@ -96,6 +104,7 @@ const Navbar: React.FC = () => {
                             <Link
                               key={c._id}
                               href={`/the-loai/${c.slug}`}
+                              prefetch={false}
                               className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
                               onClick={() => setIsCategoryOpen(false)}
                             >
@@ -132,6 +141,7 @@ const Navbar: React.FC = () => {
                               href={`/quoc-gia/${ct.slug}`}
                               className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
                               onClick={() => setIsCountryOpen(false)}
+                              prefetch={false}
                             >
                               {ct.name}
                             </Link>
@@ -208,6 +218,7 @@ const Navbar: React.FC = () => {
               href="/"
               className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
               onClick={() => setIsMenuOpen(false)}
+              prefetch={false}
             >
               Trang Chủ
             </Link>
@@ -215,6 +226,7 @@ const Navbar: React.FC = () => {
               href="/danh-sach/phim-le"
               className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
               onClick={() => setIsMenuOpen(false)}
+              prefetch={false}
             >
               Phim Lẻ
             </Link>
@@ -222,6 +234,7 @@ const Navbar: React.FC = () => {
               href="/danh-sach/phim-bo"
               className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
               onClick={() => setIsMenuOpen(false)}
+              prefetch={false}
             >
               Phim Bộ
             </Link>
