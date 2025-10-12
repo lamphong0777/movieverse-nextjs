@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    appDir: true, // ✅ Bật App Router
+  },
   images: {
     remotePatterns: [
       {
@@ -18,8 +21,9 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    formats: ['image/webp'], // Prefer WebP format for optimization
+    formats: ['image/webp'],
   },
+  trailingSlash: false,
 };
 
 module.exports = nextConfig;
