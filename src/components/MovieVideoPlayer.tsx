@@ -26,10 +26,9 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(1); // 0..1
+  const [volume, setVolume] = useState(1);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // HLS setup
   useEffect(() => {
     if (!videoRef.current) return;
     const video = videoRef.current;
@@ -45,10 +44,8 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = src;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
-  // Time & play/pause updates
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -79,7 +76,6 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
 
   const handleMouseMove = () => resetHideControls();
 
-  // Keyboard controls
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
@@ -93,8 +89,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
     };
     document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying]);
+  }, []);
 
   const playPause = () => {
     if (!videoRef.current) return;
@@ -133,24 +128,16 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
 
   const toggleFullscreen = () => {
     if (!containerRef.current) return;
-
-    const elem: HTMLElement & { webkitRequestFullscreen?: () => Promise<void> } = containerRef.current;
+    const elem = containerRef.current as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> };
 
     if (!isFullscreen) {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
     } else {
-      const doc: Document & { webkitExitFullscreen?: () => Promise<void> } = document;
-      if (doc.exitFullscreen) {
-        doc.exitFullscreen();
-      } else if (doc.webkitExitFullscreen) {
-        doc.webkitExitFullscreen();
-      }
+      const doc = document as Document & { webkitExitFullscreen?: () => Promise<void> };
+      if (doc.exitFullscreen) doc.exitFullscreen();
+      else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
     }
-
     setIsFullscreen(!isFullscreen);
     resetHideControls();
   };
@@ -163,51 +150,68 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
 
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!videoRef.current) return;
-    videoRef.current.currentTime = parseFloat(e.target.value);
-    setCurrentTime(parseFloat(e.target.value));
+    const newTime = parseFloat(e.target.value);
+    videoRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
     resetHideControls();
   };
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 bg-black' : ''}`}
-      tabIndex={0}
+      className={`relative w-full aspect-video bg-black ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}
       onMouseMove={handleMouseMove}
-      onDoubleClick={toggleFullscreen}
+      tabIndex={0}
     >
-      <video ref={videoRef} poster={poster} className="w-full h-auto rounded-lg bg-black select-none" playsInline controls={false} tabIndex={-1} />
+      <video
+        ref={videoRef}
+        poster={poster}
+        className="w-full h-full object-contain select-none"
+        playsInline
+        controls={false}
+        onDoubleClick={toggleFullscreen}
+      />
+
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+
+      {/* Lớp overlay trong suốt chặn double click ở khu vực controls */}
+      {showControls && <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-auto" />}
 
       {showControls && (
-        <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between bg-opacity-40 rounded p-1 gap-2 text-xs">
-          {/* Left time */}
-          <div className="text-white font-mono w-16 text-left">
-            {formatTime(currentTime)} / {formatTime(duration)}
-          </div>
+        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-1 bg-gradient-to-t from-black/70 to-transparent pointer-events-auto">
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            step={0.1}
+            value={currentTime}
+            onChange={handleProgressChange}
+            className="w-full h-1 bg-gray-600 rounded-full cursor-pointer progress-bar-red"
+            style={{
+              background: `linear-gradient(to right, #ff0000 0%, #ff0000 ${(currentTime / duration || 0) * 100}%, #666 ${
+                (currentTime / duration || 0) * 100
+              }%, #666 100%)`,
+            }}
+          />
 
-          {/* Center buttons + progress + volume */}
-          <div className="flex flex-col items-center flex-1 gap-0.5">
-            <div className="flex gap-1 items-center">
-              <button onClick={seekBackward} className="p-1 bg-gray-700 bg-opacity-60 rounded-full hover:bg-opacity-80" title="Tua lùi 10s">
-                <ArrowLeftIcon className="w-4 h-4 text-white" />
+          <div className="flex items-center justify-between text-white">
+            <div className="flex items-center gap-4">
+              <button onClick={seekBackward} className="p-2 hover:scale-110 transition">
+                <ArrowLeftIcon className="w-4 h-4" />
               </button>
-              <button
-                onClick={playPause}
-                className="p-1 bg-gray-700 bg-opacity-60 rounded-full hover:bg-opacity-80"
-                title={isPlaying ? 'Pause' : 'Play'}
-              >
-                {isPlaying ? <PauseIcon className="w-4 h-4 text-white" /> : <PlayIcon className="w-4 h-4 text-white" />}
+
+              <button onClick={playPause} className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition">
+                {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
               </button>
-              <button onClick={seekForward} className="p-1 bg-gray-700 bg-opacity-60 rounded-full hover:bg-opacity-80" title="Tua tới 10s">
-                <ArrowRightIcon className="w-4 h-4 text-white" />
+
+              <button onClick={seekForward} className="p-2 hover:scale-110 transition">
+                <ArrowRightIcon className="w-4 h-4" />
               </button>
-              <button
-                onClick={toggleMute}
-                className="p-1 bg-gray-700 bg-opacity-60 rounded-full hover:bg-opacity-80"
-                title={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
-              >
-                {isMuted || volume === 0 ? <SpeakerXMarkIcon className="w-4 h-4 text-white" /> : <SpeakerWaveIcon className="w-4 h-4 text-white" />}
+
+              <button onClick={toggleMute} className="p-2">
+                {isMuted || volume === 0 ? <SpeakerXMarkIcon className="w-4 h-4" /> : <SpeakerWaveIcon className="w-4 h-4" />}
               </button>
+
               <input
                 type="range"
                 min={0}
@@ -215,30 +219,41 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
                 step={0.01}
                 value={volume}
                 onChange={changeVolume}
-                className="w-16 h-1 rounded-lg accent-blue-400 cursor-pointer"
+                className="w-20 h-1 bg-gray-600 rounded accent-white"
               />
             </div>
-            <input
-              type="range"
-              min={0}
-              max={duration}
-              step={0.1}
-              value={currentTime}
-              onChange={handleProgressChange}
-              className="w-full h-1 rounded-lg accent-blue-400 cursor-pointer"
-            />
-          </div>
 
-          {/* Fullscreen */}
-          <button
-            onClick={toggleFullscreen}
-            className="p-1 bg-gray-700 bg-opacity-60 rounded-full hover:bg-opacity-80"
-            title={isFullscreen ? 'Thoát fullscreen' : 'Fullscreen'}
-          >
-            {isFullscreen ? <ArrowsPointingInIcon className="w-4 h-4 text-white" /> : <ArrowsPointingOutIcon className="w-4 h-4 text-white" />}
-          </button>
+            <div className="font-mono text-sm">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </div>
+
+            <button onClick={toggleFullscreen} className="p-2 hover:scale-110 transition">
+              {isFullscreen ? <ArrowsPointingInIcon className="w-4 h-4" /> : <ArrowsPointingOutIcon className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
       )}
+
+      <style jsx>{`
+        .progress-bar-red::-webkit-slider-thumb {
+          appearance: none;
+          height: 14px;
+          width: 14px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+        .progress-bar-red::-moz-range-thumb {
+          height: 14px;
+          width: 14px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+      `}</style>
     </div>
   );
 }
