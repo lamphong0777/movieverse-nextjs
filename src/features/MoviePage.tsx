@@ -16,7 +16,7 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
   const { slug } = use(params);
   const dispatch = useAppDispatch();
   const { movieDetails, loading, error } = useSelector((state: RootState) => state.movie);
-
+  const [openServers, setOpenServers] = useState<Record<string, boolean>>({});
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
   const [selectedServer, setSelectedServer] = useState<Server | null>(null);
 
@@ -52,6 +52,13 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
   const handleEpisodeSelect = (server: Server, episode: Episode) => {
     setSelectedServer(server);
     setSelectedEpisode(episode);
+  };
+
+  const toggleServer = (serverKey: string) => {
+    setOpenServers((prev) => ({
+      ...prev,
+      [serverKey]: !prev[serverKey],
+    }));
   };
 
   // 🔹 Loading & Error
@@ -140,17 +147,6 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
             </div>
           </div>
 
-          {/* Video Player */}
-          {/* {selectedEpisode && selectedServer && (
-            <div className="mt-10">
-              <h2 className="text-2xl font-semibold mb-4">
-                Đang xem: {selectedEpisode.name} ({selectedServer.server_name})
-              </h2>
-              <video ref={videoRef} controls playsInline className="w-full rounded-lg shadow-lg bg-black" poster={movie.thumb_url}>
-                Trình duyệt của bạn không hỗ trợ video.
-              </video>
-            </div>
-          )} */}
           {selectedEpisode && selectedServer && (
             <div className="mt-10">
               <h2 className="text-2xl font-semibold mb-4">
@@ -160,30 +156,63 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
             </div>
           )}
 
-          {/* Danh sách tập */}
+          {/* Danh sách tập - Đã sửa lỗi Hooks */}
           <div className="mt-10">
-            <h2 className="text-2xl font-semibold mb-4">Danh sách tập</h2>
+            <h2 className="text-2xl font-semibold mb-6">Danh sách tập</h2>
             {movieDetails.episodes && movieDetails.episodes.length > 0 ? (
-              movieDetails.episodes.map((server: Server) => (
-                <div key={server.server_name} className="mb-6">
-                  <h3 className="text-xl font-medium mb-3">{server.server_name}</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {(server.server_data || []).map((episode: Episode) => (
+              <>
+                {/* Quản lý trạng thái mở/đóng tất cả server ở đây */}
+                {movieDetails.episodes.map((server: Server, index) => {
+                  // Tạo key duy nhất cho mỗi server (dùng index nếu server_name có thể trùng)
+                  const serverKey = server.server_name + index;
+
+                  // Lấy trạng thái mở/đóng của server này
+                  const isOpen = openServers[serverKey] ?? (index === 0 || !server.server_name.toLowerCase().includes('vip'));
+
+                  return (
+                    <div key={server.server_name + index} className="mb-8 bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                      {/* Header server - click để toggle */}
                       <button
-                        key={episode.slug}
-                        onClick={() => handleEpisodeSelect(server, episode)}
-                        className={`py-2 rounded-lg text-center text-sm transition-all ${
-                          selectedEpisode?.slug === episode.slug ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
-                        }`}
+                        onClick={() => toggleServer(serverKey)}
+                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-700 transition-colors"
                       >
-                        {episode.name}
+                        <h3 className="text-xl font-medium text-left">{server.server_name}</h3>
+                        <svg
+                          className={`w-6 h-6 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </button>
-                    ))}
-                  </div>
-                </div>
-              ))
+
+                      {/* Danh sách tập - chỉ hiện khi mở */}
+                      {isOpen && (
+                        <div className="px-6 pb-6 pt-2">
+                          <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-15 xl:grid-cols-20 gap-3">
+                            {(server.server_data || []).map((episode: Episode) => (
+                              <button
+                                key={episode.slug}
+                                onClick={() => handleEpisodeSelect(server, episode)}
+                                className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all shadow-md ${
+                                  selectedEpisode?.slug === episode.slug
+                                    ? 'bg-blue-600 text-white scale-105'
+                                    : 'bg-gray-700 hover:bg-gray-600 hover:scale-105'
+                                }`}
+                              >
+                                {episode.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </>
             ) : (
-              <div className="text-center text-gray-300 text-lg">Không có tập phim nào được tìm thấy</div>
+              <div className="text-center text-gray-300 text-lg py-10">Không có tập phim nào được tìm thấy</div>
             )}
           </div>
 
