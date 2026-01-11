@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { Movie } from '@/types';
 
 const BASE_API = 'https://phimapi.com';
 
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     }
 
     const suggestions = apiData.data.items
-      .map((item: any) => {
+      .map((item: Movie) => {
         if (!item.slug || !item.name) return null;
 
         return {
