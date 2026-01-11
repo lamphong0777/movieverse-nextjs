@@ -1,6 +1,6 @@
 import axios from 'axios';
 import NProgress from 'nprogress';
-// import 'nprogress/nprogress.css'; // Import nProgress styles
+import 'nprogress/nprogress.css'; // Import nProgress styles
 
 // Configure nProgress
 NProgress.configure({

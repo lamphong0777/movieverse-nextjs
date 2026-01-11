@@ -99,8 +99,8 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
       <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header Phim */}
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="relative w-full md:w-1/3">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+            <div className="relative w-full">
               <Image
                 src={convertToWebP(movie.poster_url)}
                 alt={movie.name}
@@ -111,36 +111,36 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
               />
             </div>
 
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{movie.name}</h1>
-              <p className="text-lg mb-2">
+            <div className="flex-1 md:col-span-3">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4">{movie.name}</h1>
+              <p className="text-sm mb-2">
                 <strong>Tên gốc:</strong> {movie.origin_name || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Năm:</strong> {movie.year || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Quốc gia:</strong> {movie.country?.map((c: unknown) => (c as { name: string }).name).join(', ') || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Thể loại:</strong> {movie.category?.map((c: unknown) => (c as { name: string }).name).join(', ') || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Diễn viên:</strong> {movie.actor?.join(', ') || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Đạo diễn:</strong> {movie.director?.join(', ') || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Thời lượng:</strong> {movie.time || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Chất lượng:</strong> {movie.quality || 'Không xác định'}
               </p>
-              <p className="text-lg mb-2">
+              <p className="text-sm mb-2">
                 <strong>Ngôn ngữ:</strong> {movie.lang || 'Không xác định'}
               </p>
-              <p className="text-lg mb-4">
+              <p className="text-sm mb-4">
                 <strong>Trạng thái:</strong> {movie.episode_current || 'Không xác định'}
               </p>
               <p className="text-base">{movie.content || 'Không có mô tả'}</p>
@@ -190,12 +190,12 @@ export default function MoviePage({ params }: { params: Promise<{ slug: string }
                       {/* Danh sách tập - chỉ hiện khi mở */}
                       {isOpen && (
                         <div className="px-6 pb-6 pt-2">
-                          <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-15 xl:grid-cols-20 gap-3">
+                          <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-15 xl:grid-cols-20 gap-1">
                             {(server.server_data || []).map((episode: Episode) => (
                               <button
                                 key={episode.slug}
                                 onClick={() => handleEpisodeSelect(server, episode)}
-                                className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all shadow-md ${
+                                className={`text-sm font-sm p-1 transition-all ${
                                   selectedEpisode?.slug === episode.slug
                                     ? 'bg-blue-600 text-white scale-105'
                                     : 'bg-gray-700 hover:bg-gray-600 hover:scale-105'

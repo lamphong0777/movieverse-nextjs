@@ -116,7 +116,7 @@ export default function CountryDetail() {
         <meta property="og:url" content={seoOnPage?.og_url ? `https://phimapi.com/${seoOnPage.og_url}` : ''} />
       </Head>
 
-      <h1 className="text-3xl font-bold text-white mb-4">{seoOnPage?.titleHead || 'Phim Quốc Gia'}</h1>
+      {/* <h1 className="text-3xl font-bold text-white mb-4">{seoOnPage?.titleHead || 'Phim Quốc Gia'}</h1> */}
 
       <div className="text-gray-400 mb-6">
         <Link href="/" className="hover:text-red-500">
@@ -139,7 +139,7 @@ export default function CountryDetail() {
       </div>
 
       {/* 🎛️ Bộ lọc */}
-      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-gray-800 p-4 rounded-lg">
+      <div className="mb-6 grid grid-cols-2 text-xs md:text-md lg:grid-cols-5 gap-4 bg-gray-800 p-4 rounded-lg">
         <div>
           <label className="block text-gray-300 mb-2">Sắp xếp theo</label>
           <select

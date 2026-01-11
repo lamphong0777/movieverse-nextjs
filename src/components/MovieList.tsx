@@ -131,7 +131,7 @@ export default function MovieList({ routeType, searchParams }: MovieListProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-white mb-4">{formatType(filters.type)}</h1>
+      {/* <h1 className="text-2xl font-bold text-white mb-4">{formatType(filters.type)}</h1> */}
 
       <div className="text-gray-400 mb-6">
         <Link href="/" className="hover:text-red-500">
@@ -144,7 +144,7 @@ export default function MovieList({ routeType, searchParams }: MovieListProps) {
         {'>'} Trang {filters.page}
       </div>
 
-      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-gray-800 p-4 rounded-lg">
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 bg-gray-800 p-4 rounded-lg">
         <div>
           <label className="block text-gray-300 mb-2">Loại</label>
           <select

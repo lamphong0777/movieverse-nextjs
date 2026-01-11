@@ -52,7 +52,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-full disabled:opacity-50 hover:bg-gray-600 transition-colors duration-200 shadow-md"
+        className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-md disabled:opacity-50 hover:bg-gray-600 transition-colors duration-200 shadow-md"
         aria-label="Trang trước"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-3 sm:px-4 py-2 rounded-full shadow-md transition-colors duration-200 ${
+          className={`px-3 sm:px-4 py-2 rounded-md shadow-md transition-colors duration-200 ${
             currentPage === page ? 'bg-red-600 text-white' : 'bg-gray-800 text-white hover:bg-gray-600'
           }`}
           aria-label={`Trang ${page}`}
@@ -74,7 +74,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-full disabled:opacity-50 hover:bg-gray-600 transition-colors duration-200 shadow-md"
+        className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-md disabled:opacity-50 hover:bg-gray-600 transition-colors duration-200 shadow-md"
         aria-label="Trang sau"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +82,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         </svg>
       </button>
       <div className="flex items-center gap-2 sm:gap-3">
-        <span className="text-gray-300 text-sm sm:text-base">Tổng: {totalPages} trang</span>
+        <span className="text-gray-300 text-xs sm:text-base">Tổng: {totalPages} trang</span>
         <div className="relative">
           <input
             type="number"
@@ -94,7 +94,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             max={totalPages}
             className={`w-20 sm:w-24 bg-gray-800 text-white border ${
               isInputInvalid ? 'border-red-500' : 'border-gray-600'
-            } rounded-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200 text-sm sm:text-base`}
+            } rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200 text-sm sm:text-base`}
             aria-label="Nhập số trang"
           />
           {isInputInvalid && <span className="absolute -bottom-5 left-0 text-red-500 text-xs">Trang không hợp lệ</span>}
@@ -102,7 +102,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           onClick={handleInputSubmit}
           disabled={!!(!inputPage || isInputInvalid)}
-          className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-full disabled:opacity-50 hover:bg-red-700 transition-colors duration-200 shadow-md text-sm sm:text-base"
+          className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 hover:bg-red-700 transition-colors duration-200 shadow-md text-sm sm:text-base"
           aria-label="Đi đến trang đã nhập"
         >
           Đi
