@@ -26,3 +26,50 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ===== Pretty thin scrollbar ===== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.55) rgba(0, 0, 0, 0);
+}
+
+/* WebKit (Chrome/Edge/Safari) */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.55);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 160, 160, 0.7);
+  background-clip: content-box;
+}
+
+/* Optional: slightly nicer on dark scheme */
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: rgba(160, 160, 160, 0.5) rgba(0, 0, 0, 0);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(160, 160, 160, 0.5);
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(220, 220, 220, 0.65);
+    background-clip: content-box;
+  }
+}

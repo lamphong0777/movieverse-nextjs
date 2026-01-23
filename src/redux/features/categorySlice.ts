@@ -1,26 +1,17 @@
 import api from '@/lib/axios';
-import { Category, SeoOnPage } from '@/types';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Category, CategoryMovieParams, SeoOnPage } from '@/types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchMoviesByCategory = createAsyncThunk(
   'category/fetchMoviesByCategory',
-  async ({
-    slug,
-    ...filters
-  }: {
-    slug: string;
-    page: number;
-    sort_field: string;
-    sort_type: string;
-    sort_lang: string;
-    country: string;
-    year: string | number;
-    limit: number;
-  }) => {
-    const response = await api.get(`/v1/api/the-loai/${slug}`, { params: filters });
+  async ({ slug, ...filters }: CategoryMovieParams) => {
+    const response = await api.get(`/v1/api/the-loai/${slug}`, {
+      params: filters,
+    });
     return response.data.data;
   }
 );
+
 
 export const fetchCategories = createAsyncThunk('category/fetchCategories', async () => {
   const response = await api.get('/the-loai');

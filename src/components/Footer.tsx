@@ -4,7 +4,7 @@ const Footer: React.FC = () => (
   <footer className="bg-gray-900 text-gray-400">
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center">
-        <div className="text-red-500 text-2xl font-bold mb-4">KKPHIM (v0.3.0)</div>
+        <div className="text-red-500 text-2xl font-bold mb-4">KKPHIM (v0.4.0)</div>
         <div className="flex space-x-6 mb-4 text-sm">
           <a href="#" className="hover:text-white">
             Giới Thiệu

@@ -1,160 +1,165 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import Hls from 'hls.js';
+'use client'
 import {
-  ArrowsPointingOutIcon,
-  ArrowsPointingInIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
-  PlayIcon,
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
   PauseIcon,
+  PlayIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
-} from '@heroicons/react/24/solid';
+} from '@heroicons/react/24/solid'
+import Hls from 'hls.js'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface MovieVideoPlayerProps {
-  src: string;
-  poster?: string;
+  src: string
+  poster?: string
 }
 
 export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps) {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showControls, setShowControls] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showControls, setShowControls] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [isMuted, setIsMuted] = useState(false)
+  const [volume, setVolume] = useState(1)
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    if (!videoRef.current) return;
-    const video = videoRef.current;
-    video.volume = volume;
-    video.muted = isMuted;
+    if (!videoRef.current) return
+    const video = videoRef.current
+    video.volume = volume
+    video.muted = isMuted
 
     if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(src);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-      return () => hls.destroy();
+      const hls = new Hls()
+      hls.loadSource(src)
+      hls.attachMedia(video)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}))
+      return () => hls.destroy()
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = src;
+      video.src = src
     }
-  }, [src]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src])
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const video = videoRef.current
+    if (!video) return
 
-    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleDurationChange = () => setDuration(video.duration);
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+    const handleTimeUpdate = () => setCurrentTime(video.currentTime)
+    const handleDurationChange = () => setDuration(video.duration)
+    const handlePlay = () => setIsPlaying(true)
+    const handlePause = () => setIsPlaying(false)
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
-    video.addEventListener('durationchange', handleDurationChange);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
+    video.addEventListener('timeupdate', handleTimeUpdate)
+    video.addEventListener('durationchange', handleDurationChange)
+    video.addEventListener('play', handlePlay)
+    video.addEventListener('pause', handlePause)
 
     return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-      video.removeEventListener('durationchange', handleDurationChange);
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-    };
-  }, []);
+      video.removeEventListener('timeupdate', handleTimeUpdate)
+      video.removeEventListener('durationchange', handleDurationChange)
+      video.removeEventListener('play', handlePlay)
+      video.removeEventListener('pause', handlePause)
+    }
+  }, [])
 
   const resetHideControls = () => {
-    setShowControls(true);
-    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-    hideTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
-  };
+    setShowControls(true)
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
+    hideTimeoutRef.current = setTimeout(() => setShowControls(false), 3000)
+  }
 
-  const handleMouseMove = () => resetHideControls();
+  const handleMouseMove = () => resetHideControls()
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
-        e.preventDefault();
-        playPause();
+        e.preventDefault()
+        playPause()
       } else if (e.code === 'ArrowRight') {
-        seekForward();
+        seekForward()
       } else if (e.code === 'ArrowLeft') {
-        seekBackward();
+        seekBackward()
       }
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, []);
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const playPause = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) videoRef.current.pause();
-    else videoRef.current.play();
-    resetHideControls();
-  };
+    if (!videoRef.current) return
+    if (isPlaying) videoRef.current.pause()
+    else videoRef.current.play()
+    resetHideControls()
+  }
 
   const seekForward = () => {
-    if (videoRef.current) videoRef.current.currentTime += 10;
-    resetHideControls();
-  };
+    if (videoRef.current) videoRef.current.currentTime += 10
+    resetHideControls()
+  }
 
   const seekBackward = () => {
-    if (videoRef.current) videoRef.current.currentTime = Math.max(videoRef.current.currentTime - 10, 0);
-    resetHideControls();
-  };
+    if (videoRef.current)
+      videoRef.current.currentTime = Math.max(videoRef.current.currentTime - 10, 0)
+    resetHideControls()
+  }
 
   const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsMuted(videoRef.current.muted);
-    resetHideControls();
-  };
+    if (!videoRef.current) return
+    videoRef.current.muted = !videoRef.current.muted
+    setIsMuted(videoRef.current.muted)
+    resetHideControls()
+  }
 
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const vol = parseFloat(e.target.value);
+    const vol = parseFloat(e.target.value)
     if (videoRef.current) {
-      videoRef.current.volume = vol;
-      if (vol > 0 && isMuted) videoRef.current.muted = false;
-      setVolume(vol);
-      setIsMuted(vol === 0);
+      videoRef.current.volume = vol
+      if (vol > 0 && isMuted) videoRef.current.muted = false
+      setVolume(vol)
+      setIsMuted(vol === 0)
     }
-    resetHideControls();
-  };
+    resetHideControls()
+  }
 
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
-    const elem = containerRef.current as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> };
+    if (!containerRef.current) return
+    const elem = containerRef.current as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>
+    }
 
     if (!isFullscreen) {
-      if (elem.requestFullscreen) elem.requestFullscreen();
-      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      if (elem.requestFullscreen) elem.requestFullscreen()
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen()
     } else {
-      const doc = document as Document & { webkitExitFullscreen?: () => Promise<void> };
-      if (doc.exitFullscreen) doc.exitFullscreen();
-      else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
+      const doc = document as Document & { webkitExitFullscreen?: () => Promise<void> }
+      if (doc.exitFullscreen) doc.exitFullscreen()
+      else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen()
     }
-    setIsFullscreen(!isFullscreen);
-    resetHideControls();
-  };
+    setIsFullscreen(!isFullscreen)
+    resetHideControls()
+  }
 
   const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+  }
 
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!videoRef.current) return;
-    const newTime = parseFloat(e.target.value);
-    videoRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-    resetHideControls();
-  };
+    if (!videoRef.current) return
+    const newTime = parseFloat(e.target.value)
+    videoRef.current.currentTime = newTime
+    setCurrentTime(newTime)
+    resetHideControls()
+  }
 
   return (
     <div
@@ -200,7 +205,10 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
                 <ArrowLeftIcon className="w-4 h-4" />
               </button>
 
-              <button onClick={playPause} className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition">
+              <button
+                onClick={playPause}
+                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition"
+              >
                 {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
               </button>
 
@@ -209,7 +217,11 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
               </button>
 
               <button onClick={toggleMute} className="p-2">
-                {isMuted || volume === 0 ? <SpeakerXMarkIcon className="w-4 h-4" /> : <SpeakerWaveIcon className="w-4 h-4" />}
+                {isMuted || volume === 0 ? (
+                  <SpeakerXMarkIcon className="w-4 h-4" />
+                ) : (
+                  <SpeakerWaveIcon className="w-4 h-4" />
+                )}
               </button>
 
               <input
@@ -228,7 +240,11 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
             </div>
 
             <button onClick={toggleFullscreen} className="p-2 hover:scale-110 transition">
-              {isFullscreen ? <ArrowsPointingInIcon className="w-4 h-4" /> : <ArrowsPointingOutIcon className="w-4 h-4" />}
+              {isFullscreen ? (
+                <ArrowsPointingInIcon className="w-4 h-4" />
+              ) : (
+                <ArrowsPointingOutIcon className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
@@ -255,5 +271,5 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
         }
       `}</style>
     </div>
-  );
+  )
 }

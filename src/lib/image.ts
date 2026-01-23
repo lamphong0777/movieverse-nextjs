@@ -1,17 +1,13 @@
-export const convertToWebP = (url: string | undefined | null): string => {
-  // Fallback to placeholder if URL is invalid or missing
-  if (!url || typeof url !== 'string') {
-    return 'https://placehold.co/200x300?text=No+Image';
-  }
+const WEBP_PREFIX = 'https://phimapi.com/image.php?url='
 
-  // If URL already contains 'image.php', assume it's already processed
-  if (url.includes('image.php')) {
-    return url;
-  }
+export const convertToWebP = (url?: string | null): string => {
+  if (!url) return 'https://placehold.co/200x300?text=No+Image'
 
-  // Ensure the URL is absolute by prepending the CDN domain if needed
-  const absoluteUrl = url.startsWith('http') ? url : `https://phimimg.com/${url.replace(/^\/+/, '')}`;
+  if (url.includes('image.php')) return url
 
-  // Construct WebP URL using the API endpoint
-  return `https://phimapi.com/image.php?url=${encodeURIComponent(absoluteUrl)}`;
-};
+  const absoluteUrl = url.startsWith('http')
+    ? url
+    : `https://phimimg.com/${url.replace(/^\/+/, '')}`
+
+  return WEBP_PREFIX + encodeURIComponent(absoluteUrl)
+}
