@@ -27,6 +27,43 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* ===== Mobile Slider Fix ===== */
+@media (max-width: 640px) {
+  .mobile-slider-fix .slick-slide {
+    width: 50% !important;
+    min-width: 50% !important;
+    max-width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+  .mobile-slider-fix .slick-track {
+    display: flex !important;
+    width: 100% !important;
+  }
+  .mobile-slider-fix .slick-list {
+    overflow: hidden !important;
+  }
+  .slick-slider .slick-track,
+  .slick-slider .slick-list {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  
+  /* Force override for any conflicting styles */
+  .mobile-slider-fix .slick-slide > div {
+    width: 100% !important;
+  }
+  
+  /* Target specific slider instances */
+  .mobile-slider-fix.slick-initialized .slick-slide {
+    width: 50% !important;
+    min-width: 50% !important;
+    max-width: 50% !important;
+  }
+}
+
 /* ===== Pretty thin scrollbar ===== */
 
 /* Firefox */
