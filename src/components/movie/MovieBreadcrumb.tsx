@@ -1,8 +1,8 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 interface MovieBreadcrumbProps {
-  type: string;
-  page: number;
+  type: string
+  page: number
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -10,12 +10,9 @@ const TYPE_LABEL: Record<string, string> = {
   'phim-bo': 'Phim Bộ',
   'tv-shows': 'TV Shows',
   'hoat-hinh': 'Hoạt Hình',
-};
+}
 
-export default function MovieBreadcrumb({
-  type,
-  page,
-}: MovieBreadcrumbProps) {
+export default function MovieBreadcrumb({ type, page }: MovieBreadcrumbProps) {
   return (
     <div className="text-sm text-gray-400 mb-4">
       <Link href="/" className="hover:text-red-500">
@@ -27,5 +24,5 @@ export default function MovieBreadcrumb({
       </Link>{' '}
       / Trang {page}
     </div>
-  );
+  )
 }

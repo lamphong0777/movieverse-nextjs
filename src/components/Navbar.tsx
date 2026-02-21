@@ -126,13 +126,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="h-16 flex items-center justify-between gap-3">
           <Link href="/" className="text-red-600 text-2xl font-black shrink-0">
-            KKPHIM
+            PHIMHAY
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
             <NavLink href="/">Trang Chủ</NavLink>
             <NavLink href="/danh-sach/phim-le">Phim Lẻ</NavLink>
             <NavLink href="/danh-sach/phim-bo">Phim Bộ</NavLink>
+            <NavLink href="/danh-sach/hoat-hinh">Hoạt hình</NavLink>
 
             <div ref={catRef} className="relative">
               <NavButton onClick={() => setCatOpen((v) => !v)}>Thể Loại</NavButton>
@@ -239,6 +240,9 @@ export default function Navbar() {
             </MobileLink>
             <MobileLink href="/danh-sach/phim-bo" onClick={closeAll}>
               Phim Bộ
+            </MobileLink>
+            <MobileLink href="/danh-sach/hoat-hinh" onClick={closeAll}>
+              Hoat hình
             </MobileLink>
           </div>
 

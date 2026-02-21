@@ -37,7 +37,7 @@ export default function CategoryDetail() {
       sort_lang: searchParams.get('sort_lang') || 'vietsub',
       country: searchParams.get('country') || '',
       year: searchParams.get('year') ? Number(searchParams.get('year')) : '',
-      limit: 10,
+      limit: 24,
     }
   }, [slug, searchParams])
 

@@ -24,6 +24,6 @@ const nextConfig = {
     formats: ['image/webp'],
   },
   trailingSlash: false,
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

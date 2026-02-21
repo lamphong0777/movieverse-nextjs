@@ -1,5 +1,5 @@
-import CountryDetail from '@/features/CountryDetail';
+import CountryDetail from '@/features/CountryDetail'
 
 export default function Page() {
-  return <CountryDetail />;
+  return <CountryDetail />
 }

@@ -1,17 +1,17 @@
-import axios from 'axios';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css'; // Import nProgress styles
+import axios from 'axios'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css' // Import nProgress styles
 
 // Configure nProgress
 NProgress.configure({
   showSpinner: false, // Disable spinner for cleaner look
   trickleSpeed: 200, // Adjust progress bar speed
-});
+})
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL
 
 if (!baseURL) {
-  console.warn('NEXT_PUBLIC_API_URL chưa được thiết lập. Axios sẽ không hoạt động đúng.');
+  console.warn('NEXT_PUBLIC_API_URL chưa được thiết lập. Axios sẽ không hoạt động đúng.')
 }
 
 const api = axios.create({
@@ -22,33 +22,33 @@ const api = axios.create({
     // Nếu bạn cần Authorization token, bạn có thể thêm logic ở đây
     // 'Authorization': `Bearer ${localStorage.getItem('token')}`
   },
-});
+})
 
 // Add request interceptor to start nProgress
 api.interceptors.request.use(
   (config) => {
-    NProgress.start();
-    return config;
+    NProgress.start()
+    return config
   },
   (error) => {
-    NProgress.done();
-    return Promise.reject(error);
-  }
-);
+    NProgress.done()
+    return Promise.reject(error)
+  },
+)
 
 // Add response interceptor to stop nProgress
 api.interceptors.response.use(
   (response) => {
-    NProgress.done();
-    return response;
+    NProgress.done()
+    return response
   },
   (error) => {
-    NProgress.done();
+    NProgress.done()
     if (error.response && error.response.status === 401) {
-      console.log('Phiên đăng nhập hết hạn hoặc không hợp lệ.');
+      console.log('Phiên đăng nhập hết hạn hoặc không hợp lệ.')
     }
-    return Promise.reject(error);
-  }
-);
+    return Promise.reject(error)
+  },
+)
 
-export default api;
+export default api

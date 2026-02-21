@@ -1,43 +1,43 @@
-'use client';
+'use client'
 
-import { MovieQueryParams } from '@/types';
+import { MovieQueryParams } from '@/types'
 
 interface Option {
-  value: string | number;
-  label: string;
+  value: string | number
+  label: string
 }
 
 type BaseFilters = Pick<
   MovieQueryParams,
   'page' | 'sort_field' | 'sort_type' | 'sort_lang' | 'country' | 'year' | 'limit'
->;
+>
 
 interface MovieFilterBarProps<T extends BaseFilters = BaseFilters> {
-  filters: T;
-  onChange: <K extends keyof T>(key: K, value: T[K]) => void;
+  filters: T
+  onChange: <K extends keyof T>(key: K, value: T[K]) => void
 
-  showType?: boolean;
-  showCategory?: boolean;
-  showCountry?: boolean;
-  showYear?: boolean;
+  showType?: boolean
+  showCategory?: boolean
+  showCountry?: boolean
+  showYear?: boolean
 }
 
 const sortFieldOptions: Option[] = [
   { value: '_id', label: 'Mới đăng' },
   { value: 'modified.time', label: 'Mới cập nhật' },
   { value: 'year', label: 'Năm phát hành' },
-];
+]
 
 const sortTypeOptions: Option[] = [
   { value: 'desc', label: 'Giảm dần' },
   { value: 'asc', label: 'Tăng dần' },
-];
+]
 
 const langOptions: Option[] = [
   { value: 'vietsub', label: 'Vietsub' },
   { value: 'thuyet-minh', label: 'Thuyết minh' },
   { value: 'long-tieng', label: 'Lồng tiếng' },
-];
+]
 
 const countryOptions: Option[] = [
   { value: '', label: 'Tất cả quốc gia' },
@@ -45,15 +45,15 @@ const countryOptions: Option[] = [
   { value: 'han-quoc', label: 'Hàn Quốc' },
   { value: 'trung-quoc', label: 'Trung Quốc' },
   { value: 'au-my', label: 'Âu Mỹ' },
-];
+]
 
 const yearOptions: Option[] = [
   { value: '', label: 'Tất cả năm' },
   ...Array.from({ length: 2025 - 1970 + 1 }, (_, i) => {
-    const y = 2025 - i;
-    return { value: y, label: String(y) };
+    const y = 2025 - i
+    return { value: y, label: String(y) }
   }),
-];
+]
 
 export default function MovieFilterBar<T extends BaseFilters>({
   filters,
@@ -93,13 +93,11 @@ export default function MovieFilterBar<T extends BaseFilters>({
         <Select
           value={filters.year}
           options={yearOptions}
-          onChange={(v) =>
-  onChange('year', v === '' ? '' : Number(v))
-}
+          onChange={(v) => onChange('year', v === '' ? '' : Number(v))}
         />
       )}
     </div>
-  );
+  )
 }
 
 function Select({
@@ -107,9 +105,9 @@ function Select({
   options,
   onChange,
 }: {
-  value?: string | number;
-  options: Option[];
-  onChange: (v: string | number) => void;
+  value?: string | number
+  options: Option[]
+  onChange: (v: string | number) => void
 }) {
   return (
     <select
@@ -123,5 +121,5 @@ function Select({
         </option>
       ))}
     </select>
-  );
+  )
 }

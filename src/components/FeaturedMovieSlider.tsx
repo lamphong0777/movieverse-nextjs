@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import MovieCard from '@/components/MovieCard';
-import { Movie } from '@/types';
-import Link from 'next/link';
-import { Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import MovieCard from '@/components/MovieCard'
+import { Movie } from '@/types'
+import Link from 'next/link'
+import { Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
 interface FeaturedMovieSliderProps {
-  movies: Movie[];
+  movies: Movie[]
 }
 
 export default function FeaturedMovieSlider({ movies }: FeaturedMovieSliderProps) {
@@ -25,22 +25,22 @@ export default function FeaturedMovieSlider({ movies }: FeaturedMovieSliderProps
           border-radius: 50% !important;
           margin-top: -14px !important;
         }
-        
+
         .featured-movie-swiper .swiper-button-next:after,
         .featured-movie-swiper .swiper-button-prev:after {
           font-size: 14px !important;
           color: white !important;
           font-weight: bold !important;
         }
-        
+
         .featured-movie-swiper .swiper-button-next {
           right: 8px !important;
         }
-        
+
         .featured-movie-swiper .swiper-button-prev {
           left: 8px !important;
         }
-        
+
         @media (max-width: 640px) {
           .featured-movie-swiper .swiper-button-next,
           .featured-movie-swiper .swiper-button-prev {
@@ -48,16 +48,16 @@ export default function FeaturedMovieSlider({ movies }: FeaturedMovieSliderProps
             height: 24px !important;
             margin-top: -12px !important;
           }
-          
+
           .featured-movie-swiper .swiper-button-next:after,
           .featured-movie-swiper .swiper-button-prev:after {
             font-size: 12px !important;
           }
-          
+
           .featured-movie-swiper .swiper-button-next {
             right: 4px !important;
           }
-          
+
           .featured-movie-swiper .swiper-button-prev {
             left: 4px !important;
           }
@@ -121,5 +121,5 @@ export default function FeaturedMovieSlider({ movies }: FeaturedMovieSliderProps
         ))}
       </Swiper>
     </div>
-  );
+  )
 }

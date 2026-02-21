@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
 const Footer: React.FC = () => (
   <footer className="bg-gray-900 text-gray-400">
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center">
-        <div className="text-red-500 text-2xl font-bold mb-4">KKPHIM (v0.4.0)</div>
+        <div className="text-red-500 text-2xl font-bold mb-4">PHIMHAY (v0.4.5)</div>
         <div className="flex space-x-6 mb-4 text-sm">
           <a href="#" className="hover:text-white">
             Giới Thiệu
@@ -20,15 +20,17 @@ const Footer: React.FC = () => (
           </a>
         </div>
         <p className="text-center text-sm mb-2 max-w-2xl">
-          KKPhim - Trang xem phim Online với giao diện mới được bố trí và thiết kế thân thiện với người dùng. <br />
+          Phimhay - Trang xem phim Online với giao diện mới được bố trí và thiết kế thân thiện với
+          người dùng. <br />
           Nguồn phim được tổng hợp từ các website lớn với đa dạng các đầu phim và thể loại.
         </p>
         <p className="mt-2 text-center text-xs">
-          © {new Date().getFullYear()} KKPhim. All rights reserved. Vui lòng không sao chép dưới mọi hình thức.
+          © {new Date().getFullYear()} Phimhay. All rights reserved. Vui lòng không sao chép dưới
+          mọi hình thức.
         </p>
       </div>
     </div>
   </footer>
-);
+)
 
-export default Footer;
+export default Footer
