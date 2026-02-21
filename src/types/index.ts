@@ -150,3 +150,8 @@ export interface CategoryMovieParams extends MovieFilterParams {
 export type CountryQueryParams = MovieFilterParams & {
   country: string
 }
+
+export interface MovieVideoPlayerProps {
+  src: string
+  poster?: string
+}
