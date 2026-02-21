@@ -29,6 +29,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
   const [muted, setMuted] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showSpeedMenu, setShowSpeedMenu] = useState(false)
 
   const speedOptions = [0.5, 1, 1.25, 1.5, 2]
 
@@ -38,6 +39,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
     hideTimeoutRef.current = setTimeout(() => {
       setShowControls(false)
       setShowVolumeSlider(false)
+      setShowSpeedMenu(false)
     }, 2500)
   }, [])
 
@@ -70,6 +72,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
     if (!videoRef.current) return
     videoRef.current.muted = !muted
     setMuted(!muted)
+    resetHideControls()
   }
 
   const toggleFullscreen = () => {
@@ -156,6 +159,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
       onMouseLeave={() => {
         setShowControls(false)
         setShowVolumeSlider(false)
+        setShowSpeedMenu(false)
       }}
     >
       {/* Container cho video - căn giữa khi fullscreen */}
@@ -202,6 +206,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
             value={currentTime}
             onChange={(e) => {
               if (videoRef.current) videoRef.current.currentTime = Number(e.target.value)
+              resetHideControls()
             }}
             className="absolute w-full h-1 opacity-0 cursor-pointer z-10"
           />
@@ -232,7 +237,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
               <ForwardIcon className="w-5 h-5" />
             </button>
 
-            {/* Volume - SỬA LẠI PHẦN NÀY */}
+            {/* Volume */}
             <div className="relative flex items-center">
               <button
                 onClick={toggleMute}
@@ -246,7 +251,7 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
                 )}
               </button>
 
-              {/* Volume slider - xuất hiện bên phải nhưng không đè lên time */}
+              {/* Volume slider */}
               {showVolumeSlider && (
                 <div
                   className="absolute left-full ml-2 bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1"
@@ -272,34 +277,46 @@ export default function MovieVideoPlayer({ src, poster }: MovieVideoPlayerProps)
               )}
             </div>
 
-            {/* Time - thêm margin left để tránh bị đè */}
+            {/* Time */}
             <span className="text-sm font-medium ml-4">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Speed selector */}
-            <div className="relative group/speed">
-              <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium">
+            {/* Speed selector - CHUYỂN THÀNH ONCLICK */}
+            <div className="relative">
+              <button
+                onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+                className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium"
+              >
                 {playbackRate}x
               </button>
-              <div className="absolute bottom-full right-0 mb-2 w-16 bg-gray-900 rounded-lg overflow-hidden opacity-0 group-hover/speed:opacity-100 pointer-events-none group-hover/speed:pointer-events-auto">
-                {speedOptions.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => {
-                      if (videoRef.current) videoRef.current.playbackRate = s
-                      setPlaybackRate(s)
-                    }}
-                    className={`w-full px-3 py-2 text-sm hover:bg-white/10 ${
-                      playbackRate === s ? 'text-red-500 font-medium' : 'text-white'
-                    }`}
-                  >
-                    {s}x
-                  </button>
-                ))}
-              </div>
+
+              {showSpeedMenu && (
+                <>
+                  {/* Overlay để click ra ngoài đóng menu */}
+                  <div className="fixed inset-0 z-30" onClick={() => setShowSpeedMenu(false)} />
+                  <div className="absolute bottom-full right-0 mb-2 w-16 bg-gray-900 rounded-lg overflow-hidden z-40">
+                    {speedOptions.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => {
+                          if (videoRef.current) videoRef.current.playbackRate = s
+                          setPlaybackRate(s)
+                          setShowSpeedMenu(false)
+                          resetHideControls()
+                        }}
+                        className={`w-full px-3 py-2 text-sm hover:bg-white/10 ${
+                          playbackRate === s ? 'text-red-500 font-medium' : 'text-white'
+                        }`}
+                      >
+                        {s}x
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Fullscreen button */}
